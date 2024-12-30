@@ -24,6 +24,7 @@ return new class extends Migration
             $table->enum('status', ['Pending', 'Approve'])->default('Pending');
             $table->enum('payment_status', ['Paid', 'Processing', 'Due']);
             $table->text('order_note')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

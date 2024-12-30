@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('total_sales', 15, 2);
             $table->decimal('total_cost', 15, 2);
             $table->decimal('total_profit', 15, 2);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

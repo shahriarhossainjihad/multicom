@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('country')->nullable();
+            $table->string('profile_picture')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
