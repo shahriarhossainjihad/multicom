@@ -27,6 +27,7 @@ return new class extends Migration
             $table->json('variations')->nullable();
             $table->string('image');
             $table->boolean('warranty')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

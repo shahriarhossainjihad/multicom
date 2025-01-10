@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('cvc_code')->nullable();
             $table->string('card_expiry_date')->nullable();
             $table->string('mobile_banking_id')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

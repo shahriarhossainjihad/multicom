@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug');
             $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('set null');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
