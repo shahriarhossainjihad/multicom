@@ -104,15 +104,7 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $category = Category::find($id);
-
-
-            if (!$category) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Category not found.'
-                ], 404);
-            }
+            $category = Category::findOrFail($id);
 
             $validated = $request->validate([
                 'name' => 'sometimes|required|string|max:255',
@@ -120,33 +112,33 @@ class CategoryController extends Controller
                 'parent_id' => 'nullable|exists:categories,id',
                 'status' => 'sometimes|in:Active,Inactive'
             ]);
-            dd($validated);
+
+            if (empty($validated)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No valid data provided to update the category.',
+                ], 400);
+            }
+
             if (isset($validated['name'])) {
                 $validated['slug'] = Str::slug($validated['name']);
             }
 
-            if ($category) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Category not found.'
-                ], 404);
-            }
-
+            $category->update($validated);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Category updated successfully.',
                 'data' => $category
             ]);
-        }catch (\Illuminate\Validation\ValidationException $e) {
-            // Handle validation exceptions
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Validation errors.',
                 'errors' => $e->errors(),
             ], 422);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update category.',
@@ -155,4 +147,32 @@ class CategoryController extends Controller
         }
     }
 
+
+
+    public function destroy($id)
+    {
+        try {
+            $category = Category::find($id);
+
+            if (!$category) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Category not found.'
+                ], 404);
+            }
+
+            $category->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Category deleted successfully.'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete category.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
