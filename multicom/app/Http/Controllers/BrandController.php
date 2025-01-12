@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Exception;
 
 class BrandController extends Controller
 {
