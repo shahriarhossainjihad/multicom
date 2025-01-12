@@ -23,7 +23,7 @@ Route::post('/login', [AuthController::class, "login"]);
 Route::middleware(["auth:sanctum", ])->group(function(){
     Route::resource('brand', BrandController::class);
     Route::resource('category', CategoryController::class);
-    Route::resource('product', ProductController::class);
+    // Route::resource('product', ProductController::class);
     Route::resource('order', OrderController::class);
     Route::resource('cart', CartController::class);
     Route::resource('order', OrderController::class);
@@ -31,6 +31,14 @@ Route::middleware(["auth:sanctum", ])->group(function(){
     Route::resource('posts', PostController::class);
     Route::get('/dashboard', [AdminController::class, 'dashboard']);
     Route::get('/users', [AdminController::class, 'listUsers']);
+
+    Route::prefix('products')->group(function () {
+        Route::get('/', [ProductController::class, 'index']);
+        Route::post('/', [ProductController::class, 'store']);
+        Route::get('/{id}', [ProductController::class, 'show']);
+        Route::put('/{id}', [ProductController::class, 'update']);
+        Route::delete('/{id}', [ProductController::class, 'destroy']);
+    });
 });
 Route::prefix('vendors')->middleware(['auth:sanctum', 'role:Vendor'])->group(function () {
     Route::get('/dashboard', [VendorController::class, 'dashboard']);
