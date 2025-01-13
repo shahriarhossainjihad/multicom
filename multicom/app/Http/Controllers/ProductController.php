@@ -62,10 +62,9 @@ class ProductController extends Controller
             ]);
 
             $validated['slug'] = Str::slug($validated['name']);
-            $validated['status'] = $validated['status'] ?? 'Active';
-            $validated['approved_by'] = Auth::user();
-
+            $validated['status'] = $validated['status'] ?? 'Active'; 
             $product = Product::create($validated);
+            // dd($product);
 
             return response()->json([
                 'success' => true,

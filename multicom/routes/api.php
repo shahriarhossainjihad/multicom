@@ -8,6 +8,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\VendorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::middleware(["auth:sanctum", ])->group(function(){
     Route::resource('order', OrderController::class);
     Route::resource('report', ReportController::class);
     Route::resource('posts', PostController::class);
+    Route::resource('vendor', VendorController::class);
     Route::get('/dashboard', [AdminController::class, 'dashboard']);
     Route::get('/users', [AdminController::class, 'listUsers']);
 

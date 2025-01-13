@@ -15,12 +15,14 @@ class Product extends Model
         'unit',
         'size',
         'status',
+        'image'
+    ];
+    protected $guarded = [
         'brand_id',
         'category_id',
         'subcategory_id',
         'vendor_id',
-        'variations',
-        'image'
+        'approved_by',
     ];
     public function category()
     {
