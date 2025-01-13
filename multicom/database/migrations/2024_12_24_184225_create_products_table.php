@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
             $table->foreignId('subcategory_id')->nullable()->constrained('categories')->onDelete('set null');
             $table->foreignId('vendor_id')->nullable()->constrained('vendors')->onDelete('set null');
-            $table->json('variations')->nullable();
+            $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
             $table->string('image');
             $table->boolean('warranty')->default(false);
             $table->softDeletes();

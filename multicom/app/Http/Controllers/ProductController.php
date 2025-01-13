@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
@@ -56,13 +57,13 @@ class ProductController extends Controller
                 'category_id' => 'required|exists:categories,id',
                 'subcategory_id' => 'nullable|exists:categories,id',
                 // 'vendor_id' => 'required|exists:vendors,id',
-                'variations' => 'nullable|json',
                 'image' => 'required|string|max:255',
                 'warranty' => 'nullable|boolean',
             ]);
 
             $validated['slug'] = Str::slug($validated['name']);
             $validated['status'] = $validated['status'] ?? 'Active';
+            $validated['approved_by'] = Auth::user();
 
             $product = Product::create($validated);
 
