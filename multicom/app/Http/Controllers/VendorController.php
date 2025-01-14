@@ -44,7 +44,7 @@ class VendorController extends Controller
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
                 'address' => 'required|string',
-                'phone' => 'required|digits_between:10,15|unique:vendors,phone',
+                'phone' => 'required|digits_between:10,15',
                 'balance' => 'nullable|numeric|min:0',
                 'tin_number' => 'nullable|string|max:255',
                 'bin_number' => 'nullable|string|max:255'
@@ -57,12 +57,12 @@ class VendorController extends Controller
                     'errors' => $validator->errors(),
                 ], 422);
             }
-                  
+
             // Add authenticated user's ID
             $data = $validator->validated();
             $data['user_id'] = Auth::user()->id; // Set the user_id
             $data['approved_by'] = auth()->user()->id; // If an approval mechanism exists
-            
+
             // Create the vendor
             $vendor = Vendor::create($data);
             // dd($vendor);
@@ -113,9 +113,18 @@ class VendorController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->all(), $request->input(), $request->getContent());
+
+
         try {
             $vendor = Vendor::findOrFail($id);
-
+            if (!$vendor) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Vendor not found.',
+                ], 404);
+            }
+            dd($vendor);
             $validator = Validator::make($request->all(), [
                 'business_name' => 'sometimes|required|string|max:255',
                 'first_name' => 'sometimes|required|string|max:255',
@@ -133,10 +142,10 @@ class VendorController extends Controller
                     'errors' => $validator->errors(),
                 ], 422);
             }
-            // $data = $validator->validated();
-            
+            $data = $validator->validated();
+            dd($data);
+
             $vendor->update($validator->validated());
-            // dd($vendor);
 
             return response()->json([
                 'success' => true,
