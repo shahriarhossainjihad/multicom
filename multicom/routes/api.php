@@ -47,3 +47,8 @@ Route::prefix('vendors')->middleware(['auth:sanctum', 'role:Vendor'])->group(fun
     Route::post('/products', [ProductController::class, 'store']);
 });
 
+
+Route::prefix('orders')->middleware(['auth:sanctum', 'role:User'])->group(function () {
+    Route::post('/place', [OrderController::class, 'placeOrder']);
+    Route::get('/{id}', [OrderController::class, 'show']);
+});
