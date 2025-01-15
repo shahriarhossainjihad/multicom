@@ -22,6 +22,7 @@ return new class extends Migration
             $table->decimal('balance', 10, 2)->nullable();
             $table->string('tin_number')->nullable();
             $table->string('bin_number')->nullable();
+            $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
             $table->softDeletes();
             $table->timestamps();
         });

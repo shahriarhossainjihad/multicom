@@ -101,58 +101,137 @@ class CategoryController extends Controller
             ], 500);
         }
     }
+    // public function update(Request $request, $id)
+    // {
+    //     try {
+    //         $category = Category::findOrFail($id);
+
+    //         $validated = $request->validate([
+    //             'name' => 'sometimes|required|string|max:255',
+    //             'slug' => 'sometimes|string|max:255|unique:categories,slug,' . $category->id,
+    //             'parent_id' => 'nullable|exists:categories,id',
+    //             'status' => 'sometimes|in:Active,Inactive'
+    //         ]);
+
+    //         if (empty($validated)) {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'No valid data provided to update the category.',
+    //             ], 400);
+    //         }
+
+    //         if (isset($validated['name'])) {
+    //             $validated['slug'] = Str::slug($validated['name']);
+    //         }
+
+    //         $category->update($validated);
+
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Category updated successfully.',
+    //             'data' => $category
+    //         ]);
+
+    //     } catch (\Illuminate\Validation\ValidationException $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Validation errors.',
+    //             'errors' => $e->errors(),
+    //         ], 422);
+    //     } catch (Exception $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Failed to update category.',
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
     public function update(Request $request, $id)
     {
+        // dd($request);
         try {
-            $category = Category::find($id);
+            $category = Category::findOrFail($id);
+    
+            // dd($category);
+            // Validate the input
+            $validated = $request->validate([
+                'name' => 'sometimes|required|string|max:255',
+                'parent_id' => 'nullable|exists:categories,id',
+                'status' => 'sometimes|in:Active,Inactive',
+            ]);
+            // dd($validated);
+            // Ensure at least one field is provided for the update
+            if (empty($validated)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No valid data provided to update the category.',
+                ], 400);
+            }
+    
+            // Auto-generate slug if 'name' is updated
+            if (isset($validated['name'])) {
+                $validated['slug'] = Str::slug($validated['name']);
+            }
+    
+            // Update the category
+            $category->update($validated);
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Category updated successfully.',
+                'data' => $category,
+            ]);
+    
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors.',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update category.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    
 
-
+    public function destroy($id)
+    {
+        try {
+            $category = Category::findOrFail($id);
+            // dd($category);
             if (!$category) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Category not found.'
                 ], 404);
             }
-
-            $validated = $request->validate([
-                'name' => 'sometimes|required|string|max:255',
-                'slug' => 'sometimes|string|max:255|unique:categories,slug,' . $category->id,
-                'parent_id' => 'nullable|exists:categories,id',
-                'status' => 'sometimes|in:Active,Inactive'
-            ]);
-            dd($validated);
-            if (isset($validated['name'])) {
-                $validated['slug'] = Str::slug($validated['name']);
-            }
-
-            if ($category) {
+            // Optionally check for subcategories before deletion
+            if ($category->subcategories()->count() > 0) {
+                // dd($category->subcategories());
                 return response()->json([
                     'success' => false,
-                    'message' => 'Category not found.'
-                ], 404);
+                    'message' => 'Cannot delete category with subcategories. Remove subcategories first.',
+                ], 400);
             }
-
+            // $count = $category->subcategories()->all();
+            // dd($count);
+            $category->delete();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Category updated successfully.',
-                'data' => $category
+                'message' => 'Category deleted successfully.'
             ]);
-        }catch (\Illuminate\Validation\ValidationException $e) {
-            // Handle validation exceptions
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Validation errors.',
-                'errors' => $e->errors(),
-            ], 422);
-        }
-        catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to update category.',
+                'message' => 'Failed to delete category.',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
-
 }
