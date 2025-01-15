@@ -61,7 +61,7 @@ class VendorController extends Controller
             // Add authenticated user's ID
             $data = $validator->validated();
             $data['user_id'] = Auth::user()->id; // Set the user_id
-            $data['approved_by'] = auth()->user()->id; // If an approval mechanism exists
+            // $data['approved_by'] = auth()->user()->id; // If an approval mechanism exists
 
             // Create the vendor
             $vendor = Vendor::create($data);

@@ -152,7 +152,7 @@ class CategoryController extends Controller
         // dd($request);
         try {
             $category = Category::findOrFail($id);
-    
+
             // dd($category);
             // Validate the input
             $validated = $request->validate([
@@ -168,21 +168,21 @@ class CategoryController extends Controller
                     'message' => 'No valid data provided to update the category.',
                 ], 400);
             }
-    
+
             // Auto-generate slug if 'name' is updated
             if (isset($validated['name'])) {
                 $validated['slug'] = Str::slug($validated['name']);
             }
-    
+
             // Update the category
             $category->update($validated);
-    
+
             return response()->json([
                 'success' => true,
                 'message' => 'Category updated successfully.',
                 'data' => $category,
             ]);
-    
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'success' => false,
@@ -197,7 +197,7 @@ class CategoryController extends Controller
             ], 500);
         }
     }
-    
+
 
     public function destroy($id)
     {

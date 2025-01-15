@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('business_name');
+            $table->enum('status', ['Approved', 'Pending', 'Varified', 'Suspended', 'banned', 'Restricted'])->default('Pending');
             $table->text('address')->nullable();
             $table->string('phone');
             $table->decimal('balance', 10, 2)->nullable();

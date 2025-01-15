@@ -48,7 +48,8 @@ Route::prefix('vendors')->middleware(['auth:sanctum', 'role:Vendor'])->group(fun
 });
 
 
-Route::prefix('orders')->middleware(['auth:sanctum', 'role:User'])->group(function () {
+Route::prefix('orders')->middleware(['auth:sanctum'])->group(function () {
+    Route::get('/', [OrderController::class, 'index']);
     Route::post('/place', [OrderController::class, 'placeOrder']);
     Route::get('/{id}', [OrderController::class, 'show']);
 });

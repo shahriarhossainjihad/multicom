@@ -7,9 +7,28 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class OrderController extends Controller
 {
+    public function index(){
+        try {
+            $orders = Order::get();
+            $total = $orders->count();
+            return response()->json([
+                'success' => true,
+                'total' => $total,
+                'data' => $orders,
+                'message' => 'Total '.$total.' orders found',
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch orders.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
     /**
      * Place an order (logged-in users only).
      */
@@ -43,7 +62,7 @@ class OrderController extends Controller
                     'errors' => $validator->errors(),
                 ], 422);
             }
-
+            // dd($validator);
             // Start a database transaction
             DB::beginTransaction();
 
