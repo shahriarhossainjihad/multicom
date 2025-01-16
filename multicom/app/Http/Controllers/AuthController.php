@@ -7,48 +7,63 @@ use Illuminate\Http\Request;
 // use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Auth;
+use Exception;
 
 class AuthController extends Controller
 {
-    function register(Request $request){
-        // Validate the request data
-        $validator = Validator::make($request->all(), [
+    public function register(Request $request)
+    {
+        // dd($request->all());
+        try {
+            // Validate the request data
+            $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
                 'username' => 'required',
-                'email' => 'required|email',
-                'password' => 'required',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:6',
                 'confirm_password' => 'required|same:password',
-        ]);
+            ]);
 
-        if($validator->fails()){
+            if ($validator->fails()) {
+                return response()->json([
+                    "status" => 400,
+                    "message" => "Validation errors",
+                    "errors" => $validator->errors(),
+                ]);
+            }
+
+            // Create new user
+            $user = User::create([
+                'name' => $request->name,
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+            ]);
+
+            // Create and return token
+            $response = [];
+            $response["token"] = $user->createToken("MyApp")->plainTextToken;
+            $response["name"] = $user->name;
+            $response["email"] = $user->email;
+
             return response()->json([
-                "status" => 400,
-                "message" => "Validation errors",
-                "errors" => $validator->errors(),
+                "status" => 200,
+                "message" => "User registered successfully",
+                "data" => $response,
+            ]);
+        } catch (Exception $e) {
+            // Handle unexpected errors
+            return response()->json([
+                "status" => 500,
+                "message" => "Something went wrong, please try again later.",
+                "error" => $e->getMessage(),
             ]);
         }
-
-        $user = User::create([
-            'name' => $request->name,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
-
-        $response = [];
-        $response["token"] = $user->createToken("MyApp")->plainTextToken;
-        $response["name"] = $user->name;
-        $response["email"] = $user->email;
-
-        return response()->json([
-            "status" => 200,
-            "message" => "User registered successfully",
-            "data" => $response,
-        ]);
     }
 
-    public function login(Request $request){
-        if(Auth::attempt(["email" => $request->email, "password" => $request->password])){
+    public function login(Request $request)
+    {
+        if (Auth::attempt(["email" => $request->email, "password" => $request->password])) {
             $user = Auth::user();
 
             $response = [];

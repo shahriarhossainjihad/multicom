@@ -5,12 +5,14 @@ import { router } from './router/router';
 import '../css/app.css';
 import { Provider } from 'react-redux';
 import store from './redux/store';
+import { ToastContainer } from 'react-toastify';
 
 
 function App() {
     return (
         <>
             <Provider store={store}>
+                <ToastContainer />
                 <RouterProvider router={router}></RouterProvider>
             </Provider>
         </>

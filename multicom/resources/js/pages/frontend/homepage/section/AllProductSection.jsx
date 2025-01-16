@@ -6,7 +6,7 @@ const AllProductSection = () => {
 
     const { data, error, isLoading } = useGetAllProductsQuery();
 
-    console.log(data);
+    // console.log(data);
 
 
     // Conditional Rendering Outside JSX
