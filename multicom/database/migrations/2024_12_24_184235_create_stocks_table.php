@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->foreignId('vendor_id')->constrained('vendors')->onDelete('cascade');
             $table->integer('quantity')->default(0);
+            $table->enum('status', ['Available', 'Low Stock', 'Stock Out'])->default('Available');
             $table->softDeletes();
             $table->timestamps();
         });
