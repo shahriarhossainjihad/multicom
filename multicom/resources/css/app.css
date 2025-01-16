@@ -1,3 +1,44 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    /* @font-face {
+      font-family: "Nunito", serif;
+      src: url("./fonts/Nunito/Black.woff") format("woff");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+  
+    @font-face {
+      font-family: "Encode Sans";
+      src: url("./fonts/Nunito/SemiBold.woff") format("woff");
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+  
+    @font-face {
+      font-family: "Encode Sans";
+      src: url("./fonts/Nunito/Medium.woff") format("woff");
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+  
+    @font-face {
+      font-family: "Encode Sans";
+      src: url("./fonts/Nunito/Regular.woff") format("woff");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    } */
+
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+  
+    body {
+      font-family: "Nunito", serif, Arial, sans-serif;
+      font-weight: 500;
+    }
+  }

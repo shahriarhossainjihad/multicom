@@ -5,16 +5,16 @@ import useCart from '../../hooks/useCat';
 import LoveReact from '../LoveReact';
 
 const ProductCard = ({ product }) => {
-    const { brand, price, title, discountPercentage, category, thumbnail } = product;
+    const { brand, price, name, category, thumbnail } = product;
 
 
-    // Calculate discount and final price
-    const discountAmount = discountPercentage
-        ? Math.ceil((discountPercentage * price) / 100)
-        : 0;
-    const finalPrice = discountPercentage
-        ? (price - discountAmount).toFixed(2)
-        : price.toFixed(2);
+    // // Calculate discount and final price
+    // const discountAmount = discountPercentage
+    //     ? Math.ceil((discountPercentage * price) / 100)
+    //     : 0;
+    // const finalPrice = discountPercentage
+    //     ? (price - discountAmount).toFixed(2)
+    //     : price.toFixed(2);
 
     const { addProduct } = useCart();
     // Handle Add to Cart logic
@@ -29,13 +29,7 @@ const ProductCard = ({ product }) => {
         <div className="rounded-md p-1 relative group hover:shadow-xl hover:bg-white w-full max-w-[300px] bg-slate-50">
             <div className='relative w-full'>
                 <LoveReact />
-                {
-                    discountPercentage !== null && discountPercentage !== undefined && discountPercentage > 0 ? (
-                        <>
-                            <Badge discountAmount={discountAmount} />
-                        </>
-                    ) : null
-                }
+                <Badge discountAmount={12} />
             </div>
 
             <div className="w-full h-[200px] rounded-md overflow-hidden relative">
@@ -58,13 +52,13 @@ const ProductCard = ({ product }) => {
             </div>
             <div className="px-5 py-3">
                 <h6 className="text-[#5A6573] font-sm font-normal capitalize">{brand ?? category ?? ""}</h6>
-                <h4 className="text-[#1A2B3D] font-bold text-lg mb-2">{title.slice(0, 30) ?? ""}</h4>
+                <h4 className="text-[#1A2B3D] font-bold text-lg mb-2">{name.slice(0, 30) ?? ""}</h4>
 
                 <p className="text-[#1882FF] font-bold text-2xl">
-                    ${finalPrice}{" "}
-                    {discountPercentage > 0 && (
+                    ${price}{" "}
+                    {price > 0 && (
                         <span className="text-[#77818C] text-lg font-normal">
-                            <del>${price.toFixed(2)}</del>
+                            <del>${price}</del>
                         </span>
                     )}
                 </p>

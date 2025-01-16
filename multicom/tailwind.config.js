@@ -12,11 +12,11 @@ export default {
     ],
     theme: {
         extend: {
-            fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-            },
+          fontFamily: {
+            nunito: ['Nunito', 'serif'],
+          },
         },
-    },
+      },
     plugins: [
         require('daisyui'),
     ],
