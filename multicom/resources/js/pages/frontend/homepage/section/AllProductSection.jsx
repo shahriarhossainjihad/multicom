@@ -1,5 +1,6 @@
 
 import ProductCard from "../../../../components/data-display/ProductCard";
+import ProductCard2 from "../../../../components/data-display/ProductCard2";
 import { useGetAllProductsQuery } from "../../../../redux/features/api/productsApiSlice";
 
 const AllProductSection = () => {
@@ -21,9 +22,12 @@ const AllProductSection = () => {
     }
     return (
         <>
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-5 mx-auto my-5 justify-items-center">
-                {
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 mx-auto my-5 justify-items-center">
+                {/* {
                     data?.data.map(product => <ProductCard key={product.id} product={product} />)
+                } */}
+                {
+                    data?.data.map(product => <ProductCard2 key={product.id} product={product} />)
                 }
             </div>
         </>

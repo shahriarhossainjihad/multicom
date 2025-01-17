@@ -11,10 +11,12 @@ import { ToastContainer } from 'react-toastify';
 function App() {
     return (
         <>
-            <Provider store={store}>
-                <ToastContainer />
-                <RouterProvider router={router}></RouterProvider>
-            </Provider>
+            <div className='font-roboto'>
+                <Provider store={store}>
+                    <ToastContainer />
+                    <RouterProvider router={router}></RouterProvider>
+                </Provider>
+            </div>
         </>
     );
 }

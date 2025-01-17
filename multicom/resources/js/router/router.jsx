@@ -5,6 +5,8 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Profile from "../pages/frontend/profile/Profile";
 import PrivateRoute from "../provider/PrivateRouter";
+import CartPage from "../pages/frontend/cart-page/CartPage";
+import CheckoutPage from "../pages/frontend/checkout/CheckoutPage";
 
 export const router = createBrowserRouter([
     {
@@ -14,6 +16,14 @@ export const router = createBrowserRouter([
             {
                 path: '/',
                 element: <HomePage />
+            },
+            {
+                path: '/cart',
+                element: <CartPage />
+            },
+            {
+                path: '/checkout',
+                element: <CheckoutPage />
             },
             {
                 path: '/user-profile',
