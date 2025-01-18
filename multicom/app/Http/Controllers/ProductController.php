@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Stock;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
@@ -20,7 +21,12 @@ class ProductController extends Controller
     public function index()
     {
         try {
-            $products = Product::with(['category', 'brand', 'vendor'])->get();
+            $products = Product::with(['category', 'brand', 'vendor', 'stocks'])->get();
+            // Calculate total stock for each product
+            $products->each(function ($product) {
+                $product->total_stock = $product->stocks->sum('quantity');
+            });
+
             $total = count($products);
             return response()->json([
                 'success' => true,
@@ -46,6 +52,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         try {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
@@ -56,15 +63,21 @@ class ProductController extends Controller
                 'brand_id' => 'nullable|exists:brands,id',
                 'category_id' => 'required|exists:categories,id',
                 'subcategory_id' => 'nullable|exists:categories,id',
-                // 'vendor_id' => 'required|exists:vendors,id',
+                'vendor_id' => 'required|exists:vendors,id',
                 'image' => 'required|string|max:255',
                 'warranty' => 'nullable|boolean',
             ]);
 
             $validated['slug'] = Str::slug($validated['name']);
-            $validated['status'] = $validated['status'] ?? 'Active'; 
+            $validated['status'] = $validated['status'] ?? 'Active';
             $product = Product::create($validated);
             // dd($product);
+
+            Stock::create([
+                'product_id' => $product->id,
+                'vendor_id' => $request->vendor_id,
+                'quantity' => $request->stock,
+            ]);
 
             return response()->json([
                 'success' => true,

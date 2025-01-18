@@ -1,4 +1,28 @@
+import { useSelector } from "react-redux";
+import CheckoutItem from "../../../components/data-display/CheckoutItem";
+import useCart from "../../../hooks/useCat";
+import { useNavigate } from "react-router-dom";
+
 const CheckoutPage = () => {
+
+    const {cart, cartDestroy} = useCart();
+    // console.log(cart.cart);
+
+    // Calculate the total stock multiplied by quantity for each product
+    const totalProductStockValue = cart.reduce((total, product) => {
+        return total + (product.price * product.quantity);
+    }, 0);
+
+    // const user = useSelector((state) => state.authSlice);
+    // // console.log(user);
+    const navigate = useNavigate()
+
+    const handlePlaceOrder = () => {
+        cartDestroy();
+        navigate('/');
+    }
+
+
     return (
         <div className="grid md:grid-cols-3 gap-10">
             <div className=" my-5 p-5 col-span-2">
@@ -59,61 +83,39 @@ const CheckoutPage = () => {
                     </div>
                 </div>
             </div>
-            <div className="my-5 flex md:justify-end justify-center items-start">
+            <div className="my-5 flex md:justify-end justify-center items-start w-full">
                 <div className="rounded-lg bg-gray-50 w-full px-5 py-5">
                     <h4>Order Summary</h4>
                     <div className="grid gap-5 my-5 max-h-[200px] overflow-y-scroll">
-                        <div className="flex justify-start items-center gap-5">
-                            <div className="w-full md:max-w-[80px]">
-                                <img src="https://pagedone.io/asset/uploads/1701162850.png" alt="perfume bottle image"
-                                    className="mx-auto rounded-xl object-cover" />
-                            </div>
-                            <div className="flex flex-col max-[500px]:items-center gap-3">
-                                <h6 className="font-semibold leading-7 text-lg text-black">Rose Petals Divine</h6>
-                                <h6 className="font-medium text-sm leading-7 text-gray-600 transition-all duration-300 group-hover:text-indigo-600">$120.00 X 3 = $360.00</h6>
-                            </div>
-                        </div>
-                        <div className="flex justify-start items-center gap-5">
-                            <div className="w-full md:max-w-[80px]">
-                                <img src="https://pagedone.io/asset/uploads/1701162850.png" alt="perfume bottle image"
-                                    className="mx-auto rounded-xl object-cover" />
-                            </div>
-                            <div className="flex flex-col max-[500px]:items-center gap-3">
-                                <h6 className="font-semibold leading-7 text-lg text-black">Rose Petals Divine</h6>
-                                <h6 className="font-medium text-sm leading-7 text-gray-600 transition-all duration-300 group-hover:text-indigo-600">$120.00 X 3 = $360.00</h6>
-                            </div>
-                        </div>
-                        <div className="flex justify-start items-center gap-5">
-                            <div className="w-full md:max-w-[80px]">
-                                <img src="https://pagedone.io/asset/uploads/1701162850.png" alt="perfume bottle image"
-                                    className="mx-auto rounded-xl object-cover" />
-                            </div>
-                            <div className="flex flex-col max-[500px]:items-center gap-3">
-                                <h6 className="font-semibold leading-7 text-lg text-black">Rose Petals Divine</h6>
-                                <h6 className="font-medium text-sm leading-7 text-gray-600 transition-all duration-300 group-hover:text-indigo-600">$120.00 X 3 = $360.00</h6>
-                            </div>
-                        </div>
+                        {
+                            cart.map((product) => <CheckoutItem key={product.id} product={product} />)
+                        }
                     </div>
                     <div className="mt-8">
                         <div className="w-full mb-8 max-w-full max-lg:mx-auto">
                             <div className="flex items-center justify-between w-full mb-6">
                                 <p className="font-normal text-lg leading-8 text-gray-400">Sub Total</p>
-                                <h6 className="font-semibold text-lg leading-8 text-gray-900">$360.00</h6>
+                                <h6 className="font-semibold text-lg leading-8 text-gray-900">${totalProductStockValue.toFixed(2) ?? 0}</h6>
                             </div>
+                            {/* <div className="flex gap-1 items-start mb-6 text-yellow-300">
+                                <p className=" font-normal text-xs italic">Note:</p>
+                                <p className=" font-normal text-xs italic">If you purchases a single item, the delivery charge is $45. For multiple items, an additional charge of $10 will be applied for each extra product.</p>
+                            </div> */}
                             <div className="flex items-center justify-between w-full pb-6 border-b border-gray-200">
                                 <p className="font-normal text-lg leading-8 text-gray-400">Delivery Charge</p>
-                                <h6 className="font-semibold text-lg leading-8 text-gray-900">$45.00</h6>
+                                <h6 className="font-semibold text-lg leading-8 text-gray-900">$00.00</h6>
                             </div>
                             <div className="flex items-center justify-between w-full pb-6 border-b border-gray-200">
                                 <p className="font-normal text-lg leading-8 text-gray-400">Discount</p>
-                                <h6 className="font-semibold text-lg leading-8 text-gray-900">$45.00</h6>
+                                <h6 className="font-semibold text-lg leading-8 text-gray-900">$00.00</h6>
                             </div>
                             <div className="flex items-center justify-between w-full py-6">
                                 <p className="font-manrope font-medium text-xl leading-9 text-gray-900">Total</p>
-                                <h6 className="font-manrope font-medium text-xl leading-9 text-indigo-500">$405.00</h6>
+                                <h6 className="font-manrope font-medium text-xl leading-9 text-indigo-500">${totalProductStockValue.toFixed(2) ?? 0}</h6>
                             </div>
                         </div>
                         <button
+                            onClick={handlePlaceOrder}
                             className="w-full text-center bg-indigo-600 rounded-xl py-3 px-6 font-semibold text-lg text-white transition-all duration-500 hover:bg-indigo-700">
                             Place Order
                         </button>

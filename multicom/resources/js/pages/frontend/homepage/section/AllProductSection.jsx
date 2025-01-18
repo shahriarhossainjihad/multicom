@@ -1,5 +1,5 @@
 
-import ProductCard from "../../../../components/data-display/ProductCard";
+
 import ProductCard2 from "../../../../components/data-display/ProductCard2";
 import { useGetAllProductsQuery } from "../../../../redux/features/api/productsApiSlice";
 

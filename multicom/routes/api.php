@@ -22,6 +22,7 @@ Route::post('/login', [AuthController::class, "login"]);
 Route::prefix('products')->group(function () {
     Route::get('/all', [ProductController::class, 'index']);
     Route::get('/view/{id}', [ProductController::class, 'show']);
+    // Route::post('/add', [ProductController::class, 'store']);
 });
 
 Route::middleware(["auth:sanctum", ])->group(function(){

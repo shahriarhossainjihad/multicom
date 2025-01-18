@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -44,10 +45,14 @@ class Product extends Model
         return $this->belongsTo(Vendor::class);
     }
 
-    public function stock()
+    public function stocks()
     {
-        return $this->hasOne(Stock::class);
+        return $this->hasMany(Stock::class, 'product_id');
     }
+    // public function totalStock()
+    // {
+    //     return $this->hasMany(Stock::class, 'product_id')->sum('quantity');
+    // }
 
     public function orderDetails()
     {
@@ -58,5 +63,4 @@ class Product extends Model
     {
         return $this->hasMany(Cart::class);
     }
-
 }

@@ -1,12 +1,14 @@
 import CartItem from "../../../../components/data-display/CartItem";
+import useCart from "../../../../hooks/useCat";
 
 const CartItems = () => {
+    const cart = useCart();
     return (
         <div
             className="col-span-12 xl:col-span-8 lg:pr-8 pt-14 pb-8 lg:py-24 w-full max-xl:max-w-3xl max-xl:mx-auto">
             <div className="flex items-center justify-between pb-8 border-b border-gray-300">
                 <h2 className="font-manrope font-bold text-3xl leading-10 text-black">Shopping Cart</h2>
-                <h2 className="font-manrope font-bold text-xl leading-8 text-gray-600">3 Items</h2>
+                <h2 className="font-manrope font-bold text-xl leading-8 text-gray-600">{cart?.cart?.length ?? 0} Items</h2>
             </div>
             <div className="grid grid-cols-12 mt-8 max-md:hidden pb-6 border-b border-gray-200">
                 <div className="col-span-12 md:col-span-5">
@@ -26,7 +28,9 @@ const CartItems = () => {
                     </div>
                 </div>
             </div>
-            <CartItem />
+            {
+                cart.cart.map((product) => <CartItem key={product?.id} product={product} />)
+            }
         </div>
     );
 };

@@ -5,7 +5,7 @@ import useCart from '../../hooks/useCat';
 import LoveReact from '../LoveReact';
 
 const ProductCard = ({ product }) => {
-    const { brand, price, name, category, thumbnail } = product;
+    const { brand, price, name, category, image } = product;
 
 
     // // Calculate discount and final price
@@ -34,7 +34,7 @@ const ProductCard = ({ product }) => {
 
             <div className="w-full h-[200px] rounded-md overflow-hidden relative">
                 <img
-                    src={thumbnail || defaultImage}
+                    src={image || defaultImage}
                     alt="Product Image"
                     className="h-full w-full object-cover"
                 />

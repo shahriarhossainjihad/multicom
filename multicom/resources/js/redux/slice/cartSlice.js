@@ -12,7 +12,7 @@ const cartSlice = createSlice({
         addToCart(state, action) {
             const index = state.list.findIndex(product => product.id === action.payload.id);
             if (index !== -1) {
-                if (state.list[index].quantity < action.payload.stock) {
+                if (state.list[index].quantity < action.payload.total_stock) {
                     state.list[index].quantity += 1;
                     toast.success("Product added in Cart Successfully");
                 } else {
@@ -38,8 +38,12 @@ const cartSlice = createSlice({
             state.list = state.list.filter(product => product.id !== action.payload.id);
             saveCartToLocalStorage(state.list); // Save updated cart
         },
+        destroyCart(state) {
+            state.list = []; // Empty the cart
+            saveCartToLocalStorage(state.list);
+        }
     },
 });
 
-export const { addToCart, removeFromCart, updateCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, updateCart, destroyCart } = cartSlice.actions;
 export default cartSlice.reducer;
