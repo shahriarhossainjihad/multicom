@@ -26,9 +26,7 @@ const Register = () => {
                     if (response.status == 200) {
                         toast.success("User Created Successfully");
                         reset();
-                        setCookie('user-token', response?.data?.token, 30);
-
-                        dispatch(setAuth(response?.data?.token));
+                        dispatch(setAuth(response?.data));
                         navigate('/')
                     } else {
                         const error = response.errors;

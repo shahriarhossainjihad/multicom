@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, "register"]);
 Route::post('/login', [AuthController::class, "login"]);
 
+Route::post('/place-order', [OrderController::class, 'placeOrder']);
+Route::post('/user/{id}', [AuthController::class, 'user']);
+
 Route::prefix('products')->group(function () {
     Route::get('/all', [ProductController::class, 'index']);
     Route::get('/view/{id}', [ProductController::class, 'show']);
@@ -57,3 +60,5 @@ Route::prefix('orders')->middleware(['auth:sanctum'])->group(function () {
     Route::post('/place', [OrderController::class, 'placeOrder']);
     Route::get('/{id}', [OrderController::class, 'show']);
 });
+
+

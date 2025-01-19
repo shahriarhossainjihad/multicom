@@ -6,7 +6,7 @@ const orderApi = createApi({
     endpoints: (builder) => ({
         orderPlace: builder.mutation({
             query: (data) => ({
-                url: '/orders/place',
+                url: '/place-order',
                 method: "POST",
                 body: data,
             })

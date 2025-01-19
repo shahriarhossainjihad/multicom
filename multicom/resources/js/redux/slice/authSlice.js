@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getCookie } from "../../utils/cookies";
+import { deleteCookie, getCookie, setCookie } from "../../utils/cookies";
 
 const initialState = {
     isAuthenticated: false,
-    token: null,
+    user: null,
 }
 
 const authSlice = createSlice({
@@ -12,17 +12,23 @@ const authSlice = createSlice({
     reducers: {
         setAuth: (state, action) => {
             state.isAuthenticated = true;
-            state.token = action.payload;
+            state.user = action.payload;
+            setCookie('user-token', action.payload.token, 30);
         },
         logout: (state) => {
             state.isAuthenticated = false;
-            state.token = null;
+            state.user = null;
+            deleteCookie('user-token');
         },
         checkAuth: (state) => {
             const token = getCookie('user-token');
+            console.log(token);
             if (token) {
                 state.isAuthenticated = true;
-                state.token = token;
+                if (!state.user) {
+                    state.user = {}; // Initialize `state.user` as an empty object if it's null
+                }
+                state.user.token = token;
             }
         },
     }

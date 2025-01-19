@@ -17,7 +17,10 @@ const authApiSlice = createApi({
                 method: "POST",
                 body: user,
             })
-        })
+        }),
+        // getUser: builder.query({
+        //     query: ({ id }) => `/user/${id}`,
+        // })
     })
 })
 

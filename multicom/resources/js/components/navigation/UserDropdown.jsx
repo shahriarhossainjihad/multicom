@@ -1,9 +1,14 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { logout } from "../../redux/slice/authSlice";
 
 const UserDropdown = () => {
     const isAuthenticated = useSelector((state) => state.authSlice.isAuthenticated);
-    // console.log(isAuthenticated);
+
+    const dispatch = useDispatch();
+    const handleLogOut = () => {
+        dispatch(logout())
+    }
     return (
         <>
             {
@@ -30,7 +35,7 @@ const UserDropdown = () => {
                                     Settings
                                 </Link>
                             </li>
-                            <li><a>Logout</a></li>
+                            <li><a onClick={handleLogOut}>Logout</a></li>
                         </ul>
                     </div>
                     :

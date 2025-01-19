@@ -6,13 +6,13 @@ import { useEffect } from "react";
 import { checkAuth } from "../../redux/slice/authSlice";
 
 const MainPage = () => {
-    // const isAuthenticated = useSelector((state) => state.authSlice);
-    // console.log(isAuthenticated);
-    // const dispatch = useDispatch();
-    // useEffect(() => {
-    //     dispatch(checkAuth());
-    //     // console.log(checkAuth());
-    // }, [dispatch]);
+    const isAuthenticated = useSelector((state) => state.authSlice);
+    console.log(isAuthenticated);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(checkAuth());
+        console.log(checkAuth());
+    }, [dispatch]);
     return (
         <div className="container mx-auto">
             <Navbar />

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Auth;
 use Exception;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -17,8 +18,8 @@ class AuthController extends Controller
         try {
             // Validate the request data
             $validator = Validator::make($request->all(), [
-                'name' => 'required|string',
-                'username' => 'required',
+                'username' => 'required|string|unique:users,username',
+                'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:6',
                 'confirm_password' => 'required|same:password',
@@ -37,7 +38,7 @@ class AuthController extends Controller
                 'name' => $request->name,
                 'username' => $request->username,
                 'email' => $request->email,
-                'password' => bcrypt($request->password),
+                'password' => Hash::make($request->password),
             ]);
 
             // Create and return token
@@ -45,6 +46,7 @@ class AuthController extends Controller
             $response["token"] = $user->createToken("MyApp")->plainTextToken;
             $response["name"] = $user->name;
             $response["email"] = $user->email;
+            $response["id"] = $user->id;
 
             return response()->json([
                 "status" => 200,
@@ -70,6 +72,7 @@ class AuthController extends Controller
             $response["token"] = $user->createToken("MyApp")->plainTextToken;
             $response["name"] = $user->name;
             $response["email"] = $user->email;
+            $response["id"] = $user->id;
 
             return response()->json([
                 "status" => 200,
@@ -82,5 +85,22 @@ class AuthController extends Controller
             "message" => "Authentication Error",
             "data" => null,
         ]);
+    }
+    public function user($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user) {
+            return response()->json([
+                "status" => 200,
+                "message" => "User loged in successfully",
+                "data" => $user,
+            ]);
+        } else {
+            return response()->json([
+                "status" => 400,
+                "message" => "User Not Found",
+            ]);
+        }
     }
 }

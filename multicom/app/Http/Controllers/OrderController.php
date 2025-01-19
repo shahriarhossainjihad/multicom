@@ -11,7 +11,8 @@ use Exception;
 
 class OrderController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         try {
             $orders = Order::get();
             $total = $orders->count();
@@ -19,7 +20,7 @@ class OrderController extends Controller
                 'success' => true,
                 'total' => $total,
                 'data' => $orders,
-                'message' => 'Total '.$total.' orders found',
+                'message' => 'Total ' . $total . ' orders found',
             ]);
         } catch (Exception $e) {
             return response()->json([
@@ -34,25 +35,26 @@ class OrderController extends Controller
      */
     public function placeOrder(Request $request)
     {
+        // dd($request->all());
         try {
             // Ensure the user is logged in
-            if (!auth()->check()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'You must be logged in to place an order.',
-                ], 403);
-            }
+            // if (!auth()->check()) {
+            //     return response()->json([
+            //         'success' => false,
+            //         'message' => 'You must be logged in to place an order.',
+            //     ], 403);
+            // }
 
             // Validate the incoming request
             $validator = Validator::make($request->all(), [
-                'products' => 'required|array',
-                'products.*.product_id' => 'required|exists:products,id',
-                'products.*.quantity' => 'required|integer|min:1',
-                'products.*.unit_price' => 'required|numeric|min:0',
-                'shipping_method' => 'required|string|max:255',
-                'shipping_charge' => 'nullable|numeric|min:0',
-                'order_note' => 'nullable|string|max:500',
-                'coupon_id' => 'nullable|integer',
+                // 'products' => 'required|array',
+                // 'products.*.product_id' => 'required|exists:products,id',
+                // 'products.*.quantity' => 'required|integer|min:1',
+                // 'products.*.unit_price' => 'required|numeric|min:0',
+                // 'shipping_method' => 'required|string|max:255',
+                // 'shipping_charge' => 'nullable|numeric|min:0',
+                // 'order_note' => 'nullable|string|max:500',
+                // 'coupon_id' => 'nullable|integer',
             ]);
 
             if ($validator->fails()) {
@@ -70,9 +72,9 @@ class OrderController extends Controller
             $totalQuantity = 0;
             $totalPrice = 0;
 
-            foreach ($request->input('products') as $product) {
+            foreach ($request->input('cart') as $product) {
                 $totalQuantity += $product['quantity'];
-                $totalPrice += $product['quantity'] * $product['unit_price'];
+                $totalPrice += $product['quantity'] * $product['price'];
             }
 
             $grandTotal = $totalPrice + ($request->input('shipping_charge', 0));
@@ -82,12 +84,12 @@ class OrderController extends Controller
 
             // Create the order
             $order = Order::create([
-                'user_id' => auth()->id(),
+                'user_id' => $request->input('user_id'),
                 'invoice_number' => $invoiceNumber,
                 'total_quantity' => $totalQuantity,
                 'total_price' => $totalPrice,
                 'coupon_id' => $request->input('coupon_id'),
-                'shipping_method' => $request->input('shipping_method'),
+                'shipping_method' => $request->input('paymentMethod'),
                 'shipping_charge' => $request->input('shipping_charge', 0),
                 'grand_total' => $grandTotal,
                 'status' => 'Pending',
@@ -96,13 +98,13 @@ class OrderController extends Controller
             ]);
 
             // Add order details
-            foreach ($request->input('products') as $product) {
+            foreach ($request->input('cart') as $product) {
                 OrderDetail::create([
                     'order_id' => $order->id,
-                    'product_id' => $product['product_id'],
+                    'product_id' => $product['id'],
                     'quantity' => $product['quantity'],
-                    'unit_price' => $product['unit_price'],
-                    'total_price' => $product['quantity'] * $product['unit_price'],
+                    'unit_price' => $product['price'],
+                    'total_price' => $product['quantity'] * $product['price'],
                 ]);
             }
 
@@ -110,6 +112,7 @@ class OrderController extends Controller
             DB::commit();
 
             return response()->json([
+                'status' => 200,
                 'success' => true,
                 'message' => 'Order placed successfully.',
                 'data' => [
