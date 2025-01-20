@@ -1,12 +1,16 @@
 import { useSelector } from "react-redux";
+// import { useGetUserQuery } from "../../../redux/features/api/authApiSlice";
+import { useOrderByUserQuery } from "../../../redux/features/api/orderApi";
 
 const Profile = () => {
     const user = useSelector((state) => state.authSlice);
-    console.log(user);
+    // console.log(user);
+    const userId = user?.user?.id;
+    console.log(userId);
 
-    // const {data, isLoading, error} = useGetUserQuery(user.user.id);
+    const { data, isLoading, error } = useOrderByUserQuery(userId);
 
-    // console.log(data);
+    console.log(data);
 
     return (
         <>
@@ -33,7 +37,7 @@ const Profile = () => {
                             <span className="px-2 font-semibold text-base leading-7 text-white">Send Message</span>
                         </button>
                     </div>
-                  
+
                 </div>
             </section>
 
@@ -146,7 +150,7 @@ const Profile = () => {
                             <path d="M0 1H1216" stroke="#D1D5DB" />
                         </svg>
 
-                        <div className="flex max-lg:flex-col items-center gap-8 lg:gap-24 px-3 md:px-11">
+                        {/* <div className="flex max-lg:flex-col items-center gap-8 lg:gap-24 px-3 md:px-11">
                             <div className="grid grid-cols-4 w-full">
                                 <div className="col-span-4 sm:col-span-1">
                                     <img src="https://pagedone.io/asset/uploads/1705474672.png" alt="" className="max-sm:mx-auto object-cover" />
@@ -181,7 +185,7 @@ const Profile = () => {
                                 </div>
                             </div>
 
-                        </div>
+                        </div> */}
                         <svg className="mt-9 w-full" xmlns="http://www.w3.org/2000/svg" width="1216" height="2" viewBox="0 0 1216 2"
                             fill="none">
                             <path d="M0 1H1216" stroke="#D1D5DB" />

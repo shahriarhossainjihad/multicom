@@ -149,9 +149,20 @@ class OrderController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to fetch order.',
+                'messaFunctionNamege' => 'Failed to fetch order.',
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function orderByUser($id)
+    {
+        $orders = Order::with('orderDetails')->where('user_id', $id)->latest()->get();
+
+        return response()->json([
+            'status' => 200,
+            'success' => true,
+            'data' => $orders,
+        ]); 
     }
 }

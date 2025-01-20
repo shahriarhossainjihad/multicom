@@ -8,5 +8,5 @@ Route::get('/', function () {
 
 // React Routes catch-all
 Route::get('/{any}', function () {
-    return view('main'); // আপনার React এর blade টেমপ্লেট যেখানে রয়েছে।
+    return view('main'); 
 })->where('any', '.*');

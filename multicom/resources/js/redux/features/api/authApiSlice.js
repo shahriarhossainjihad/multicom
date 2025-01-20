@@ -18,12 +18,12 @@ const authApiSlice = createApi({
                 body: user,
             })
         }),
-        // getUser: builder.query({
-        //     query: ({ id }) => `/user/${id}`,
-        // })
+        getUser: builder.query({
+            query: (id) => `/user/${id}`,
+        })
     })
 })
 
-export const { useRegisterUserMutation, useLoginUserMutation } = authApiSlice;
+export const { useRegisterUserMutation, useLoginUserMutation, useGetUserQuery } = authApiSlice;
 
 export default authApiSlice;

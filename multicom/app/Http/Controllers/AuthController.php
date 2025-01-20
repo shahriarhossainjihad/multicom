@@ -88,6 +88,7 @@ class AuthController extends Controller
     }
     public function user($id)
     {
+        // dd($id);
         $user = User::findOrFail($id);
 
         if ($user) {

@@ -11,9 +11,12 @@ const orderApi = createApi({
                 body: data,
             })
         }),
+        orderByUser: builder.query({
+            query: (id) => `/order-by-user/${id}`,
+        })
     })
 })
 
-export const { useOrderPlaceMutation } = orderApi;
+export const { useOrderPlaceMutation, useOrderByUserQuery } = orderApi;
 
 export default orderApi;

@@ -17,7 +17,7 @@ const CheckoutPage = () => {
     }, 0);
 
     const user = useSelector((state) => state.authSlice);
-    console.log(user.user);
+    console.log("My auth id", user.user.id);
 
     let userId = 0;
     if (user.user) {

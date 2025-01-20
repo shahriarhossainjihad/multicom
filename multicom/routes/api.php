@@ -20,7 +20,8 @@ Route::post('/register', [AuthController::class, "register"]);
 Route::post('/login', [AuthController::class, "login"]);
 
 Route::post('/place-order', [OrderController::class, 'placeOrder']);
-Route::post('/user/{id}', [AuthController::class, 'user']);
+Route::get('/user/{id}', [AuthController::class, 'user']);
+Route::get('/order-by-user/{id}', [OrderController::class, 'orderByUser']);
 
 Route::prefix('products')->group(function () {
     Route::get('/all', [ProductController::class, 'index']);
